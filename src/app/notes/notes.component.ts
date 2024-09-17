@@ -11,6 +11,8 @@ import { Note } from '../services/note';
 export class NotesComponent implements OnInit {
   noteForm!:FormGroup
 
+  notesData:any=[]
+
   noteObj:Note={
     id: '',
     note_title: '',
@@ -24,6 +26,7 @@ export class NotesComponent implements OnInit {
     })
   }
   ngOnInit(): void {
+    this.getAllNotes();
   }
 
   addNote(){
@@ -37,8 +40,16 @@ export class NotesComponent implements OnInit {
     this.noteService.addNote(this.noteObj).then((note)=>{
       if(note){
         alert("Note added successfully!");
+        this.noteForm.reset()
       }
     })
-   
+  }
+
+  //Get All
+  getAllNotes(){
+    this.noteService.getNotes().subscribe((res:Note[])=>{
+      console.log(res);
+      this.notesData=res;
+    })
   }
 }

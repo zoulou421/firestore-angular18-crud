@@ -6,9 +6,10 @@
 
 
     <div class="row">
-        <div class="card card-body">
+        <div class="card card-body" *ngFor="let note of notesData ">
+            <h5>{{note.note_title}}</h5>
             <p class="text-muted">
-                Angular 18 bla bla bla
+                {{note.note_desc}}
             </p>
             <div class="d-flex align-items-center">
                 <span class="mx-3">
@@ -45,7 +46,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" (click)="addNote()">Add Note</button>
+            <button type="button" class="btn btn-primary" (click)="addNote()" [disabled]="noteForm.invalid">Add Note</button>
           </div>
         </div>
       </div>
