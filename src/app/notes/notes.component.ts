@@ -52,4 +52,12 @@ export class NotesComponent implements OnInit {
       this.notesData=res;
     })
   }
+
+  //Delete
+  deleteNote(note:Note){
+    let decision=confirm("Are sure want to delete this Note ?");
+    if(decision==true){
+      this.noteService.deleteNote(note);
+    }
+  }
 }
