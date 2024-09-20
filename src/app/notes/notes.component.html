@@ -13,7 +13,7 @@
             </p>
             <div class="d-flex align-items-center">
                 <span class="mx-3">
-                    <i class="bi bi-pen" data-bs-toggle="modal" data-bs-target="#editNoteModal"></i>
+                    <i class="bi bi-pen" data-bs-toggle="modal" data-bs-target="#editNoteModal" (click)="getAllDetails(note)"></i>
                 </span>
                 <span class="mx-3">
                     <i class="bi bi-trash" (click)="deleteNote(note)"></i>
@@ -62,20 +62,20 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <form>
+              <form [formGroup]="editForm">
                 <div class="mb-3">
                   <label for="recipient-name" class="col-form-label">Note Tile:</label>
-                  <input type="text" class="form-control" id="recipient-name">
+                  <input type="text" class="form-control" id="recipient-name" formControlName="edit_title" [value]="noteDetails?.note_title">
                 </div>
                 <div class="mb-3">
                   <label for="message-text" class="col-form-label">Note Description:</label>
-                  <textarea class="form-control" id="message-text"></textarea>
+                  <textarea class="form-control" id="message-text" formControlName="edit_description" [value]="noteDetails?.note_desc"></textarea>
                 </div>
               </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Edit Note</button>
+              <button type="button" class="btn btn-primary" (click)="updateNote(notesData)">Edit Note</button>
             </div>
           </div>
         </div>

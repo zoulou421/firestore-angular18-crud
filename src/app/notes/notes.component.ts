@@ -13,6 +13,10 @@ export class NotesComponent implements OnInit {
 
   notesData:any=[]
 
+  editForm!:FormGroup;
+
+  noteDetails!:any;
+
   noteObj:Note={
     id: '',
     note_title: '',
@@ -23,6 +27,11 @@ export class NotesComponent implements OnInit {
     this.noteForm=this.fb.group({
       title:['',Validators.required],
       description:['',Validators.required]
+    });
+
+    this.editForm=this.fb.group({
+      edit_title:['',Validators.required],
+      edit_description:['',Validators.required]
     })
   }
   ngOnInit(): void {
@@ -30,7 +39,6 @@ export class NotesComponent implements OnInit {
   }
 
   addNote(){
-    
     const {value}=this.noteForm
     console.log(value)
     this.noteObj.id='',
@@ -60,4 +68,112 @@ export class NotesComponent implements OnInit {
       this.noteService.deleteNote(note);
     }
   }
+
+  getAllDetailsV2(note:Note){
+    this.noteDetails=note
+    console.log('Selected Note:', this.noteDetails); // Debugging: check if noteDetails has an id
+  }
+
+  getAllDetailsV3(note: Note) {
+    this.noteDetails = note; // Ensure the selected note has its `id` stored
+    console.log('Selected note:', this.noteDetails);  // Debug: confirm `id` exists
+  }
+  
+  getAllDetails(note: Note) {
+    this.noteDetails = note;
+    console.log("Selected Note ID:", this.noteDetails.id);  // Check if `id` exists
+  }
+  
+
+  //update improved
+  /*updateNote(note: Note) {
+    const { value } = this.editForm;
+    console.log(value);
+  
+    // Assign the `id` from the selected note
+    this.noteObj.id = note.id; // Ensure the note ID is assigned correctly
+    this.noteObj.note_title = value.edit_title;
+    this.noteObj.note_desc = value.edit_description;
+  
+    // Check for undefined values before calling the update
+    if (!this.noteObj.id) {
+      alert("Note ID is missing!");
+      return;
+    }else{
+      this.noteService.updateNote(note,this.noteObj).then((res)=>{
+        console.log(res)
+        alert("Note Updated Successfully");
+      })
+      this.editForm.reset();
+    }*/
+  //end update improved
+
+  //Update note
+  updateNoteV2(note:Note){
+     const{value}=this.editForm;
+     console.log(value);
+    (this.noteObj.id=note.id),
+    (this.noteObj.note_title=value.edit_title),
+    (this.noteObj.note_desc=value.edit_description)
+
+    this.noteService.updateNote(note,this.noteObj).then((res)=>{
+      console.log(res)
+      alert("Note Updated Successfully");
+    })
+    this.editForm.reset();
+  }
+
+  updateNote() {
+    const { value } = this.editForm;
+  
+    // Ensure that noteDetails has a valid ID
+    if (!this.noteDetails || !this.noteDetails.id) {
+      alert("Note ID is missing!");
+      return;
+    }
+  
+    // Update the noteObj fields with the form data and the correct note ID
+    this.noteObj.id = this.noteDetails.id;
+    this.noteObj.note_title = value.edit_title;
+    this.noteObj.note_desc = value.edit_description;
+  
+    // Call the service to update the note
+    this.noteService.updateNote(this.noteDetails, this.noteObj).then((res) => {
+      console.log(res);
+      alert("Note Updated Successfully");
+    }).catch((error) => {
+      console.error("Error updating the note:", error);
+    });
+  
+    this.editForm.reset();
+  }
+  
+/*
+    updateNote() {
+      const { value } = this.editForm;
+      console.log(value);
+    
+      // Ensure that noteDetails has the ID before proceeding
+      if (!this.noteDetails || !this.noteDetails.id) {
+        alert("Note ID is missing!");
+        return;
+      }
+    
+      this.noteObj.id = this.noteDetails.id;  // Assign from selected noteDetails
+      this.noteObj.note_title = value.edit_title;
+      this.noteObj.note_desc = value.edit_description;
+    
+      this.noteService.updateNote(this.noteDetails.id, this.noteObj).then((res) => {
+        console.log('Note updated successfully:', res);
+        alert("Note Updated Successfully");
+      }).catch((error) => {
+        console.error("Error updating note:", error);
+      });
+    
+      this.editForm.reset();
+    }
+    */
+
+    
+
 }
